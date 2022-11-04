@@ -12,7 +12,6 @@ import { rootPath } from './utils/rootPath.js';
 import logger from './services/winston.js';
 import { errorMiddleware } from './middlewares/errors.js';
 import { multerMiddleware } from './middlewares/multer.js';
-import multer from 'multer';
 
 // application
 dotenv.config({ path: path.join(rootPath, 'configs', 'config.env') });

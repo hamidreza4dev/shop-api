@@ -1,7 +1,7 @@
 import v from './Validation.js';
 import Category from '../category.js';
 
-const userRegisterSchema = {
+const categorySchema = {
   $$async: true,
   name: {
     type: 'string',
@@ -20,6 +20,6 @@ const userRegisterSchema = {
   $$strict: 'remove',
 };
 
-const userRegisterSchemaCheck = v.compile(userRegisterSchema);
+const categorySchemaCheck = v.compile(categorySchema);
 
-export default userRegisterSchemaCheck;
+export default categorySchemaCheck;

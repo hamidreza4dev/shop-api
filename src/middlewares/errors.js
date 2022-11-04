@@ -5,6 +5,7 @@ import mongoose from 'mongoose';
  * @type {import('express').ErrorRequestHandler}
  */
 export const errorMiddleware = (error, req, res, next) => {
+  console.log(error);
   const message = error.message;
   const data = error.data || {};
   const statusCode = error.statusCode || 500;

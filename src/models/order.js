@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+import orderSchemaCheck from './secure/orderSchema.js';
+
 const orderSchema = new mongoose.Schema(
   {
     user: {
@@ -21,8 +23,27 @@ const orderSchema = new mongoose.Schema(
         },
       },
     ],
+    totalPrice: {
+      type: Number,
+      required: true,
+      min: 1,
+    },
+    status: {
+      type: String,
+      enum: ['pending', 'progress', 'sent', 'received'],
+      required: true,
+      lowercase: true,
+      default: 'pending',
+      trim: true,
+    },
   },
   { timestamps: true }
 );
 
-const Order = new mongoose.model('Order', orderSchema);
+orderSchema.statics.orderValidation = function (body) {
+  return orderSchemaCheck(body);
+};
+
+const Order = mongoose.model('Order', orderSchema);
+
+export default Order;

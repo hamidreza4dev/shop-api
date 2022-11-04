@@ -1,5 +1,8 @@
 import mongoose from 'mongoose';
-import { validateProductSchemaCheck } from './secure/productSchema.js';
+import {
+  validateEditProductSchemaCheck,
+  validateProductSchemaCheck,
+} from './secure/productSchema.js';
 
 const productSchema = new mongoose.Schema(
   {
@@ -23,6 +26,11 @@ const productSchema = new mongoose.Schema(
       required: true,
       ref: 'Category',
     },
+    price: {
+      type: Number,
+      required: true,
+      min: 1,
+    },
     status: {
       type: String,
       enum: ['public', 'private', 'sold-out'],
@@ -34,6 +42,7 @@ const productSchema = new mongoose.Schema(
     user: {
       type: mongoose.Types.ObjectId,
       ref: 'User',
+      required: true,
     },
   },
   {
@@ -43,6 +52,10 @@ const productSchema = new mongoose.Schema(
 
 productSchema.statics.validateProduct = function (body) {
   return validateProductSchemaCheck(body);
+};
+
+productSchema.statics.validateEditProduct = function (body) {
+  return validateEditProductSchemaCheck(body);
 };
 
 const Product = mongoose.model('Product', productSchema);

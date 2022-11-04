@@ -9,11 +9,17 @@ export const getCart = async (req, res, next) => {
   try {
     const user = await User.findOne({ _id: req.user._id });
 
+    if (!user) {
+      const error = new Error('User not Found !');
+      error.statusCode = 400;
+      throw error;
+    }
+
     res.status(200).json({
       success: true,
       message: 'Cart fetched !',
       data: {
-        cart: user.cart,
+        cart: user?.cart || [],
       },
     });
   } catch (error) {
@@ -40,6 +46,12 @@ export const postCart = async (req, res, next) => {
     }
 
     const user = await User.findOne({ _id: req.user._id });
+
+    if (!user) {
+      const error = new Error('User not Found !');
+      error.statusCode = 400;
+      throw error;
+    }
 
     const ProductAlreadyExistsInCart = user.cart.find(
       (p) => p.product.toString() === product
@@ -146,6 +158,12 @@ export const deleteCart = async (req, res, next) => {
         },
       }
     );
+
+    if (updateResult.modifiedCount === 0) {
+      const error = new Error('Cannot modify cart item !');
+      error.statusCode = 422;
+      throw error;
+    }
 
     res.json({
       success: true,
