@@ -9,13 +9,43 @@ import User from '../../models/user.js';
  */
 export const getOrders = async (req, res, next) => {
   try {
-    const orders = await Order.find({ order: req.user._id });
+    const orders = await Order.find({ user: req.user._id });
 
     res.json({
       success: true,
       message: 'Orders fetched !',
       data: {
         orders,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
+ * GET orders
+ * @route /orders/
+ * @type {import('express').RequestHandler}
+ */
+export const getOrder = async (req, res, next) => {
+  try {
+    const order = await Order.findOne({
+      user: req.user._id,
+      _id: req.params.id,
+    });
+
+    if (!order) {
+      const error = new Error('No orders found !');
+      error.statusCode = 404;
+      throw error;
+    }
+
+    res.json({
+      success: true,
+      message: 'Order fetched !',
+      data: {
+        order,
       },
     });
   } catch (error) {

@@ -28,6 +28,33 @@ export const getProducts = async (req, res, next) => {
 };
 
 /**
+ * GET products
+ * @route /products/:id
+ * @type {import('express').RequestHandler}
+ */
+export const getProduct = async (req, res, next) => {
+  try {
+    const product = await Product.findOne({ _id: req.params.id });
+
+    if (!product) {
+      const error = new Error('No Product found !');
+      error.statusCode = 404;
+      throw error;
+    }
+
+    res.json({
+      success: true,
+      message: 'Product Fetched !',
+      data: {
+        product,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+/**
  * POST product
  * @route /products/
  * @type {import('express').RequestHandler}
