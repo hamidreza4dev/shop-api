@@ -5,6 +5,7 @@ import dotenv from 'dotenv';
 import d from 'debug';
 import cors from 'cors';
 import morgan from 'morgan';
+import swaggerUiExpress from 'swagger-ui-express';
 
 import connectDB from './services/database.js';
 import router from './routes/router.js';
@@ -12,6 +13,7 @@ import { rootPath } from './utils/rootPath.js';
 import logger from './services/winston.js';
 import { errorMiddleware } from './middlewares/errors.js';
 import { multerMiddleware } from './middlewares/multer.js';
+import swaggerOptions from './utils/swagger.js';
 
 // application
 dotenv.config({ path: path.join(rootPath, 'configs', 'config.env') });
@@ -27,6 +29,8 @@ app.use(cors());
 app.use(express.json());
 app.use(multerMiddleware());
 app.use(morgan('combined', { stream: logger.stream }));
+app.use('/documentation', swaggerUiExpress.serve);
+app.use('/documentation', swaggerUiExpress.setup(swaggerOptions));
 
 // routes
 app.use(router);

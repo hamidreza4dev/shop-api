@@ -1,9 +1,9 @@
-import Category from '../../models/category.js';
-import Order from '../../models/order.js';
-import Product from '../../models/product.js';
-import User from '../../models/user.js';
-import deleteFile from '../../utils/deleteFiles.js';
-import { uploadFile } from '../../utils/uploadFile.js';
+import Category from "../../models/category.js";
+import Order from "../../models/order.js";
+import Product from "../../models/product.js";
+import User from "../../models/user.js";
+import deleteFile from "../../utils/deleteFiles.js";
+import { uploadFile } from "../../utils/uploadFile.js";
 
 /**
  * GET products
@@ -16,7 +16,7 @@ export const getProducts = async (req, res, next) => {
 
     res.json({
       success: true,
-      message: 'Products Fetched !',
+      message: "Products Fetched !",
       data: {
         products,
         total: products.length,
@@ -37,14 +37,14 @@ export const getProduct = async (req, res, next) => {
     const product = await Product.findOne({ _id: req.params.id });
 
     if (!product) {
-      const error = new Error('No Product found !');
+      const error = new Error("No Product found !");
       error.statusCode = 404;
       throw error;
     }
 
     res.json({
       success: true,
-      message: 'Product Fetched !',
+      message: "Product Fetched !",
       data: {
         product,
       },
@@ -61,7 +61,7 @@ export const getProduct = async (req, res, next) => {
  */
 export const postProduct = async (req, res, next) => {
   try {
-    const { title, description, category, status = 'public' } = req.body;
+    const { title, description, category, status = "public" } = req.body;
     const price = +req.body.price;
     // validate user input
     const validation = await Product.validateProduct({
@@ -74,7 +74,7 @@ export const postProduct = async (req, res, next) => {
     });
 
     if (validation !== true) {
-      const error = new Error('Validation Error !');
+      const error = new Error("Validation Error !");
       error.data = validation;
       error.statusCode = 422;
       throw error;
@@ -82,10 +82,10 @@ export const postProduct = async (req, res, next) => {
 
     // upload image to images folder with jpg or png format
     const uploadedFile = await uploadFile({
-      type: 'image',
-      folder: 'images',
+      type: "image",
+      folder: "images",
       file: req.file,
-      format: req.file.mimetype.split('/').pop(),
+      format: req.file.mimetype.split("/").pop(),
     });
 
     // resolve categories and flatten (names) categories
@@ -99,7 +99,7 @@ export const postProduct = async (req, res, next) => {
 
     if (unResolvedCategories.length > 0) {
       const error = new Error(
-        'They are some un resolved categories, please first create theme !'
+        "They are some un resolved categories, please first create theme !"
       );
       error.statusCode = 422;
       error.data = {
@@ -137,7 +137,7 @@ export const postProduct = async (req, res, next) => {
 
     res.status(201).json({
       success: true,
-      message: 'Product Created Successfully !',
+      message: "Product Created Successfully !",
       data: {
         product,
       },
@@ -157,14 +157,14 @@ export const deleteProduct = async (req, res, next) => {
     const product = await Product.findOne({ _id: req.params.id });
 
     if (!product) {
-      const error = new Error('Product not found !');
+      const error = new Error("Product not found !");
       error.statusCode = 404;
       throw error;
     }
 
     const productUpdateResult = await User.updateMany(
       {
-        'cart.product': product._id,
+        "cart.product": product._id,
       },
       {
         $pull: {
@@ -177,7 +177,7 @@ export const deleteProduct = async (req, res, next) => {
 
     const orderUpdateResult = await Order.updateMany(
       {
-        'products.product': product._id,
+        "products.product": product._id,
       },
       {
         $pull: {
@@ -189,7 +189,7 @@ export const deleteProduct = async (req, res, next) => {
     );
 
     await deleteFile(product.image).catch((err) => {
-      const error = new Error('Error while deleting file !');
+      const error = new Error("Error while deleting file !");
       error.statusCode = 500;
       throw error;
     });
@@ -197,7 +197,7 @@ export const deleteProduct = async (req, res, next) => {
 
     res.json({
       success: true,
-      message: 'Product Deleted Successfully !',
+      message: "Product Deleted Successfully !",
       data: {},
     });
   } catch (error) {
@@ -215,7 +215,7 @@ export const putProduct = async (req, res, next) => {
     const product = await Product.findOne({ _id: req.params.id });
 
     if (!product) {
-      const error = new Error('Product not found !');
+      const error = new Error("Product not found !");
       error.statusCode = 404;
       throw error;
     }
@@ -232,7 +232,7 @@ export const putProduct = async (req, res, next) => {
     });
 
     if (validation !== true) {
-      const error = new Error('Validation Error !');
+      const error = new Error("Validation Error !");
       error.statusCode = 422;
       error.data = validation;
       throw error;
@@ -242,14 +242,14 @@ export const putProduct = async (req, res, next) => {
     let uploadedFile;
     if (req.file) {
       uploadedFile = await uploadFile({
-        type: 'image',
-        folder: 'images',
+        type: "image",
+        folder: "images",
         file: req.file,
-        format: req.file.mimetype.split('/').pop(),
+        format: req.file.mimetype.split("/").pop(),
       });
 
       await deleteFile(product.image).catch((err) => {
-        const error = new Error('Error while deleting file !');
+        const error = new Error("Error while deleting file !");
         error.statusCode = 500;
         throw error;
       });
@@ -271,7 +271,7 @@ export const putProduct = async (req, res, next) => {
 
       if (unResolvedCategories.length > 0) {
         const error = new Error(
-          'They are some un resolved categories, please first create theme !'
+          "They are some un resolved categories, please first create theme !"
         );
         error.statusCode = 422;
         error.data = {
@@ -292,7 +292,7 @@ export const putProduct = async (req, res, next) => {
 
     res.json({
       success: true,
-      message: 'Product updated successfully !',
+      message: "Product updated successfully !",
       data: {
         product,
       },
