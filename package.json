@@ -1,5 +1,5 @@
 {
-  "name": "01.project",
+  "name": "shop-api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,7 +9,7 @@
   },
   "type": "module",
   "keywords": [],
-  "author": "",
+  "author": "Hamidreza Firouzi",
   "license": "ISC",
   "dependencies": {
     "bcryptjs": "^2.4.3",
